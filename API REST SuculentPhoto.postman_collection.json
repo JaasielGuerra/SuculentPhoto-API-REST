@@ -1,0 +1,52 @@
+{
+	"info": {
+		"_postman_id": "7908399c-bd51-4f0f-bd07-db96a5b0a737",
+		"name": "API REST SuculentPhoto",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "13837162"
+	},
+	"item": [
+		{
+			"name": "registrar suculenta",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "fotos",
+							"type": "file",
+							"src": [
+								"/home/jaasiel/Descargas/logo.jpeg",
+								"/home/jaasiel/Descargas/login-bg.jpg",
+								"/home/jaasiel/Descargas/kyd_ids (2).json"
+							]
+						},
+						{
+							"key": "sintoma",
+							"value": "Manchas negras",
+							"type": "text"
+						},
+						{
+							"key": "consejo",
+							"value": "Cortar las hojas afectadas",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8080/registrar-suculenta",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"registrar-suculenta"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
