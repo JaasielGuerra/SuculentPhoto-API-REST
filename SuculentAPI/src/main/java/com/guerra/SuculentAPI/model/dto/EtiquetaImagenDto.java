@@ -9,6 +9,6 @@ import java.io.Serializable;
 @Builder
 public class EtiquetaImagenDto implements Serializable {
 
-    private String sintoma;
+    private String idSintoma;
     private String consejo;
 }
