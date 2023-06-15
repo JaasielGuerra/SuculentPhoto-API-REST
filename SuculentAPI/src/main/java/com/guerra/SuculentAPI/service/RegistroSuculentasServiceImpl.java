@@ -2,12 +2,17 @@ package com.guerra.SuculentAPI.service;
 
 import com.guerra.SuculentAPI.exception.SuculentException;
 import com.guerra.SuculentAPI.model.dto.EtiquetaImagenDto;
+import com.guerra.SuculentAPI.model.dto.SintomaDto;
 import com.guerra.SuculentAPI.model.dto.SuculentaRegistradaDto;
 import com.guerra.SuculentAPI.model.entity.Consejo;
+import com.guerra.SuculentAPI.model.entity.Sintoma;
 import com.guerra.SuculentAPI.repository.ConsejoRepository;
 import com.guerra.SuculentAPI.repository.SintomaRepository;
 import lombok.extern.java.Log;
+import org.hibernate.TransactionException;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -38,7 +43,8 @@ public class RegistroSuculentasServiceImpl implements RegistroSuculentasService 
 
     @Override
     @Transactional
-    public SuculentaRegistradaDto registrarSuculenta(List<MultipartFile> fotos, EtiquetaImagenDto etiqueta) throws SuculentException, IOException {
+    public SuculentaRegistradaDto registrarSuculenta(List<MultipartFile> fotos, EtiquetaImagenDto etiqueta) throws SuculentException, IOException,
+            DataAccessException, ConstraintViolationException, TransactionException {
 
         SuculentException exceptionAcumulador = new SuculentException();
 
@@ -120,5 +126,49 @@ public class RegistroSuculentasServiceImpl implements RegistroSuculentasService 
             fotosGuardadas.add(foto.getOriginalFilename());
         }
 
+    }
+
+    @Override
+    public SintomaDto registrarSintoma(SintomaDto sintomaDto) throws SuculentException, DataAccessException,
+            ConstraintViolationException, TransactionException {
+
+        SuculentException exceptionAcumulador = new SuculentException();
+
+        if (sintomaDto.getSintoma() == null || sintomaDto.getSintoma().isEmpty()) {
+            exceptionAcumulador.addException(new SuculentException("El campo sintoma no puede estar vacío"));
+        }
+
+        if (sintomaDto.getDescripcion() == null || sintomaDto.getDescripcion().isEmpty()) {
+            exceptionAcumulador.addException(new SuculentException("El campo descripción no puede estar vacío"));
+        }
+
+        // si hay excepciones, las lanzo
+        if (exceptionAcumulador.hasExceptions()) {
+            throw exceptionAcumulador.build();
+        }
+
+        String idSintomaConstruido =  sintomaDto.getSintoma()
+                .trim()
+                .toUpperCase()
+                .replaceAll(" ", "_");
+
+        Sintoma sintoma = new Sintoma();
+        sintoma.setIdSintoma(idSintomaConstruido);
+        sintoma.setSintoma(sintomaDto.getSintoma());
+        sintoma.setDescripcion(sintomaDto.getDescripcion());
+        sintoma.setCantidadConsejos(0);
+        sintoma.setCantidadFotos(0);
+
+        Sintoma sintomaRegistrado = sintomaRepository
+                .findById(idSintomaConstruido) //busco el sintoma por id
+                .orElse(sintomaRepository.save(sintoma)); //si no existe, lo guardo
+
+        return SintomaDto.builder()
+                .idSintoma(sintomaRegistrado.getIdSintoma())
+                .sintoma(sintomaRegistrado.getSintoma())
+                .descripcion(sintomaRegistrado.getDescripcion())
+                .cantidadConsejos(sintomaRegistrado.getCantidadConsejos())
+                .cantidadFotos(sintomaRegistrado.getCantidadFotos())
+                .build();
     }
 }

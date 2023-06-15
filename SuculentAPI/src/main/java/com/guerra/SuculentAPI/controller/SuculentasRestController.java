@@ -3,6 +3,7 @@ package com.guerra.SuculentAPI.controller;
 import com.guerra.SuculentAPI.exception.SuculentException;
 import com.guerra.SuculentAPI.model.dto.EtiquetaImagenDto;
 import com.guerra.SuculentAPI.model.dto.ResponseDataDto;
+import com.guerra.SuculentAPI.model.dto.SintomaDto;
 import com.guerra.SuculentAPI.model.dto.SuculentaRegistradaDto;
 import com.guerra.SuculentAPI.service.RegistroSuculentasService;
 import lombok.extern.log4j.Log4j2;
@@ -23,6 +24,54 @@ public class SuculentasRestController {
 
     public SuculentasRestController(RegistroSuculentasService registroSuculentasService) {
         this.registroSuculentasService = registroSuculentasService;
+    }
+
+    @PostMapping("/sintoma")
+    @ResponseBody
+    public ResponseEntity<ResponseDataDto> registrarSintoma(@RequestBody SintomaDto sintomaDto){
+
+        ResponseDataDto respuestaRegistroSintoma = new ResponseDataDto();
+
+        try {
+
+            SintomaDto sintomaRegistrado = registroSuculentasService.registrarSintoma(sintomaDto);
+
+            respuestaRegistroSintoma = ResponseDataDto.builder()
+                    .message("Sintoma registrado exitosamente")
+                    .data(sintomaRegistrado)
+                    .errors(Collections.emptyList())
+                    .build();
+
+        } catch (SuculentException e) {
+
+            log.error(e.getMessage());
+
+            List<String> errores = e.getExceptionsList()
+                    .stream()
+                    .map(SuculentException::getMessage)
+                    .collect(Collectors.toList());
+
+            respuestaRegistroSintoma = ResponseDataDto.builder()
+                    .message("Error al registrar sintoma")
+                    .errors(errores)
+                    .build();
+
+            return ResponseEntity.badRequest().body(respuestaRegistroSintoma);
+
+        } catch (Exception e) {
+
+            log.error(e.getMessage());
+
+            respuestaRegistroSintoma = ResponseDataDto.builder()
+                    .message(e.toString())
+                    .errors(Collections.singletonList(e.getMessage()))
+                    .build();
+
+            return ResponseEntity.internalServerError().body(respuestaRegistroSintoma);
+
+        }
+
+        return ResponseEntity.ok(respuestaRegistroSintoma);
     }
 
     @PostMapping("/registrar-suculenta")
@@ -61,7 +110,7 @@ public class SuculentasRestController {
             return ResponseEntity.badRequest().body(respuestaRegistroSuculenta);
 
 
-        } catch (IOException e) { // status 500
+        } catch (Exception e) { // status 500
 
             log.error(e.getMessage(), e);
 

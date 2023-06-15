@@ -1,0 +1,17 @@
+package com.guerra.SuculentAPI.model.dto;
+
+import lombok.Builder;
+import lombok.Data;
+
+import java.io.Serializable;
+
+@Data
+@Builder
+public class SintomaDto implements Serializable {
+
+        private String idSintoma;
+        private String sintoma;
+        private String descripcion;
+        private int cantidadConsejos;
+        private int cantidadFotos;
+}

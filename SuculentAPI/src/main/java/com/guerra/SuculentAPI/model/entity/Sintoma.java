@@ -21,4 +21,13 @@ public class Sintoma {
     @Column(name = "sintoma", nullable = false, length = 50)
     private String sintoma;
 
+    @Column(name = "descripcion", nullable = false, length = 150)
+    private String descripcion;
+
+    @Column(name = "cantidad_consejos", nullable = false)
+    private int cantidadConsejos;
+
+    @Column(name = "cantidad_fotos", nullable = false)
+    private int cantidadFotos;
+
 }
