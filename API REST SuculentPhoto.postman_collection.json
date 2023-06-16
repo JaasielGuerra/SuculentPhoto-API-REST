@@ -18,19 +18,22 @@
 							"key": "fotos",
 							"type": "file",
 							"src": [
-								"/home/jaasiel/Descargas/logo.jpeg",
-								"/home/jaasiel/Descargas/login-bg.jpg",
-								"/home/jaasiel/Descargas/kyd_ids (2).json"
+								"/home/jaasiel/Descargas/Plant_leave_diseases_dataset_without_augmentation/Tomato___Tomato_Yellow_Leaf_Curl_Virus/image (5357).JPG",
+								"/home/jaasiel/Descargas/Plant_leave_diseases_dataset_without_augmentation/Tomato___Tomato_Yellow_Leaf_Curl_Virus/image (5356).JPG",
+								"/home/jaasiel/Descargas/Plant_leave_diseases_dataset_without_augmentation/Tomato___Tomato_Yellow_Leaf_Curl_Virus/image (5355).JPG",
+								"/home/jaasiel/Descargas/Plant_leave_diseases_dataset_without_augmentation/Tomato___Tomato_Yellow_Leaf_Curl_Virus/image (5354).JPG",
+								"/home/jaasiel/Descargas/Plant_leave_diseases_dataset_without_augmentation/Tomato___Tomato_Yellow_Leaf_Curl_Virus/image (5353).JPG",
+								"/home/jaasiel/Descargas/Plant_leave_diseases_dataset_without_augmentation/Tomato___Tomato_Yellow_Leaf_Curl_Virus/image (5352).JPG"
 							]
 						},
 						{
-							"key": "sintoma",
-							"value": "Manchas negras",
+							"key": "idSintoma",
+							"value": "RESEQUEDAD_HOJAS",
 							"type": "text"
 						},
 						{
 							"key": "consejo",
-							"value": "Cortar las hojas afectadas",
+							"value": "Regar cada 5 días",
 							"type": "text"
 						}
 					]
@@ -43,6 +46,51 @@
 					"port": "8080",
 					"path": [
 						"registrar-suculenta"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "registrar sintoma",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"sintoma\" : \"Araña días\",\n    \"descripcion\" : \"Presenta cochinillas en las hojas\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/sintoma",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"sintoma"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "consultar sintomas",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/sintomas",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"sintomas"
 					]
 				}
 			},
