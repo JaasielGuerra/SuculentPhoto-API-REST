@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -150,7 +151,8 @@ public class RegistroSuculentasServiceImpl implements RegistroSuculentasService 
             throw exceptionAcumulador.build();
         }
 
-        String idSintomaConstruido = sintomaDto.getSintoma()
+        String sintomaNormalizado = normalizarTexto(sintomaDto.getSintoma());
+        String idSintomaConstruido = sintomaNormalizado
                 .trim()
                 .toUpperCase()
                 .replaceAll(" ", "_");
@@ -173,6 +175,12 @@ public class RegistroSuculentasServiceImpl implements RegistroSuculentasService 
                 .cantidadConsejos(sintomaRegistrado.getCantidadConsejos())
                 .cantidadFotos(sintomaRegistrado.getCantidadFotos())
                 .build();
+    }
+
+    private String normalizarTexto(String texto) {
+        String textoNormalizado = Normalizer.normalize(texto, Normalizer.Form.NFD);
+        textoNormalizado = textoNormalizado.replaceAll("\\p{M}", "");
+        return textoNormalizado;
     }
 
     @Override
