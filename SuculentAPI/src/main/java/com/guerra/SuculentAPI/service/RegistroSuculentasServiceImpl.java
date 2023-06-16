@@ -2,10 +2,12 @@ package com.guerra.SuculentAPI.service;
 
 import com.guerra.SuculentAPI.exception.SuculentException;
 import com.guerra.SuculentAPI.model.dto.EtiquetaImagenDto;
+import com.guerra.SuculentAPI.model.dto.SintomaBasicoDto;
 import com.guerra.SuculentAPI.model.dto.SintomaDto;
 import com.guerra.SuculentAPI.model.dto.SuculentaRegistradaDto;
 import com.guerra.SuculentAPI.model.entity.Consejo;
 import com.guerra.SuculentAPI.model.entity.Sintoma;
+import com.guerra.SuculentAPI.model.query.ConsultaBasicaSintoma;
 import com.guerra.SuculentAPI.repository.ConsejoRepository;
 import com.guerra.SuculentAPI.repository.SintomaRepository;
 import lombok.extern.java.Log;
@@ -23,6 +25,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Log
@@ -81,7 +84,7 @@ public class RegistroSuculentasServiceImpl implements RegistroSuculentasService 
         if (exceptionAcumulador.hasExceptions()) {
             throw exceptionAcumulador.build();
         }
-        
+
         guardarFotos(etiqueta, fotos);
 
         persistirDatos(etiqueta, fotos.size());
@@ -170,5 +173,14 @@ public class RegistroSuculentasServiceImpl implements RegistroSuculentasService 
                 .cantidadConsejos(sintomaRegistrado.getCantidadConsejos())
                 .cantidadFotos(sintomaRegistrado.getCantidadFotos())
                 .build();
+    }
+
+    @Override
+    public List<SintomaBasicoDto> obtenerSintomas() {
+
+        List<ConsultaBasicaSintoma> sintomas = sintomaRepository.consultarSintomas();
+        return sintomas.stream()
+                .map(SintomaBasicoDto::mapeoBasicoDesde)
+                .collect(Collectors.toList());
     }
 }

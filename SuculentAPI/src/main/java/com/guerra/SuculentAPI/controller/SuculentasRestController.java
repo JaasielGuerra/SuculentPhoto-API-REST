@@ -1,17 +1,13 @@
 package com.guerra.SuculentAPI.controller;
 
 import com.guerra.SuculentAPI.exception.SuculentException;
-import com.guerra.SuculentAPI.model.dto.EtiquetaImagenDto;
-import com.guerra.SuculentAPI.model.dto.ResponseDataDto;
-import com.guerra.SuculentAPI.model.dto.SintomaDto;
-import com.guerra.SuculentAPI.model.dto.SuculentaRegistradaDto;
+import com.guerra.SuculentAPI.model.dto.*;
 import com.guerra.SuculentAPI.service.RegistroSuculentasService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,9 +22,41 @@ public class SuculentasRestController {
         this.registroSuculentasService = registroSuculentasService;
     }
 
+    @GetMapping("/sintomas")
+    @ResponseBody
+    public ResponseEntity<ResponseDataDto> consultarSintomasBasico() {
+
+        ResponseDataDto respuestaConsultaSintomas = new ResponseDataDto();
+
+        try {
+
+            List<SintomaBasicoDto> sintomas = registroSuculentasService.obtenerSintomas();
+
+            respuestaConsultaSintomas = ResponseDataDto.builder()
+                    .message("Consulta basica de sintomas exitosa")
+                    .data(sintomas)
+                    .errors(Collections.emptyList())
+                    .build();
+
+        } catch (Exception e) {
+
+            log.error(e.getMessage(), e);
+
+            respuestaConsultaSintomas = ResponseDataDto.builder()
+                    .message(e.toString())
+                    .errors(Collections.singletonList(e.getMessage()))
+                    .build();
+
+            return ResponseEntity.internalServerError().body(respuestaConsultaSintomas);
+
+        }
+
+        return ResponseEntity.ok(respuestaConsultaSintomas);
+    }
+
     @PostMapping("/sintoma")
     @ResponseBody
-    public ResponseEntity<ResponseDataDto> registrarSintoma(@RequestBody SintomaDto sintomaDto){
+    public ResponseEntity<ResponseDataDto> registrarSintoma(@RequestBody SintomaDto sintomaDto) {
 
         ResponseDataDto respuestaRegistroSintoma = new ResponseDataDto();
 

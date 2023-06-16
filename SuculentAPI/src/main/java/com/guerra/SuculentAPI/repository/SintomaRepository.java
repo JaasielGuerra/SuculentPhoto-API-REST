@@ -1,9 +1,12 @@
 package com.guerra.SuculentAPI.repository;
 
 import com.guerra.SuculentAPI.model.entity.Sintoma;
+import com.guerra.SuculentAPI.model.query.ConsultaBasicaSintoma;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+
+import java.util.List;
 
 public interface SintomaRepository extends JpaRepository<Sintoma, String> {
 
@@ -13,4 +16,8 @@ public interface SintomaRepository extends JpaRepository<Sintoma, String> {
 
     @Query(value = "SELECT s.cantidadFotos FROM Sintoma s WHERE s.idSintoma = ?1")
     int findCantidadFotosByIdSintoma(String idSintoma);
+
+    @Query(value = "SELECT s.idSintoma AS idSintoma, s.sintoma AS sintoma, s.descripcion AS descripcion FROM Sintoma s")
+    List<ConsultaBasicaSintoma> consultarSintomas();
+
 }

@@ -3,6 +3,7 @@ package com.guerra.SuculentAPI.service;
 
 import com.guerra.SuculentAPI.exception.SuculentException;
 import com.guerra.SuculentAPI.model.dto.EtiquetaImagenDto;
+import com.guerra.SuculentAPI.model.dto.SintomaBasicoDto;
 import com.guerra.SuculentAPI.model.dto.SintomaDto;
 import com.guerra.SuculentAPI.model.dto.SuculentaRegistradaDto;
 import org.hibernate.TransactionException;
@@ -22,4 +23,7 @@ public interface RegistroSuculentasService {
 
         @Transactional
         SintomaDto registrarSintoma(SintomaDto sintomaDto) throws SuculentException, DataAccessException, ConstraintViolationException, TransactionException;
+
+        @Transactional(readOnly = true)
+        List<SintomaBasicoDto> obtenerSintomas();
 }
