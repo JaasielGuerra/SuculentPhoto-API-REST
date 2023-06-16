@@ -81,11 +81,10 @@ public class RegistroSuculentasServiceImpl implements RegistroSuculentasService 
         if (exceptionAcumulador.hasExceptions()) {
             throw exceptionAcumulador.build();
         }
-
-
-        persistirDatos(etiqueta);
-
+        
         guardarFotos(etiqueta, fotos);
+
+        persistirDatos(etiqueta, fotos.size());
 
         return SuculentaRegistradaDto.builder()
                 .imagenes(fotosGuardadas)
@@ -94,10 +93,10 @@ public class RegistroSuculentasServiceImpl implements RegistroSuculentasService 
                 .build();
     }
 
-    private void persistirDatos(EtiquetaImagenDto etiqueta) {
+    private void persistirDatos(EtiquetaImagenDto etiqueta, int cantFotos) {
 
-        //TODO: actualizar la cantidad de fotos en la tabla sintoma
-        //TODO: actualizar la cantidad de consejos en la tabla sintoma
+        sintomaRepository.aumentarCantidadConsejosYFotos(etiqueta.getIdSintoma(), 1, cantFotos);
+
         Consejo consejo = new Consejo();
         consejo.setDescripcion(etiqueta.getConsejo());
         consejo.setIdSintoma(sintomaRepository.getReferenceById(etiqueta.getIdSintoma()));
@@ -106,8 +105,8 @@ public class RegistroSuculentasServiceImpl implements RegistroSuculentasService 
 
     private void guardarFotos(EtiquetaImagenDto etiqueta, List<MultipartFile> fotos) throws IOException {
 
-        //guardar fotos en disco
-        //TODO: colocar el numero de la foto en el nombre, asi IMAGE_1.jpg, IMAGE_2.jpg, etc
+        int cantFotos = sintomaRepository.findCantidadFotosByIdSintoma(etiqueta.getIdSintoma());
+
         rutaDirectorioImagen = dirImagenes + File.separator + etiqueta.getIdSintoma();
         Path nuevoDirectorio = Path.of(rutaDirectorioImagen);
 
@@ -118,12 +117,13 @@ public class RegistroSuculentasServiceImpl implements RegistroSuculentasService 
         fotosGuardadas = new ArrayList<>();
         for (MultipartFile foto : fotos) {
 
-            String rutaFoto = rutaDirectorioImagen + File.separator + foto.getOriginalFilename();
+            String nombreImagen = "IMAGE_" + (++cantFotos) + ".jpg";
+            String rutaFoto = rutaDirectorioImagen + File.separator + nombreImagen;
             Path nuevaFoto = Path.of(rutaFoto);
 
             log.info("Guardando foto: " + nuevaFoto);
             Files.copy(foto.getInputStream(), nuevaFoto);
-            fotosGuardadas.add(foto.getOriginalFilename());
+            fotosGuardadas.add(nombreImagen);
         }
 
     }
@@ -147,7 +147,7 @@ public class RegistroSuculentasServiceImpl implements RegistroSuculentasService 
             throw exceptionAcumulador.build();
         }
 
-        String idSintomaConstruido =  sintomaDto.getSintoma()
+        String idSintomaConstruido = sintomaDto.getSintoma()
                 .trim()
                 .toUpperCase()
                 .replaceAll(" ", "_");
