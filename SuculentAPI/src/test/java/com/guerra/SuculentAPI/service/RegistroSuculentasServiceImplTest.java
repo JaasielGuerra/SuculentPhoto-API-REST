@@ -1,6 +1,7 @@
 package com.guerra.SuculentAPI.service;
 
 import com.guerra.SuculentAPI.exception.SuculentException;
+import com.guerra.SuculentAPI.model.dto.SintomaBasicoDto;
 import com.guerra.SuculentAPI.model.dto.SintomaDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,9 +36,9 @@ class RegistroSuculentasServiceImplTest {
     @Test
     void obtenerSintomas() {
 
-        List<SintomaDto> sintomaDtos = registroSuculentasService.obtenerSintomas();
+        List<SintomaBasicoDto> sintomaDtos = registroSuculentasService.obtenerSintomas();
 
-        for (SintomaDto sintomaDto : sintomaDtos) {
+        for (SintomaBasicoDto sintomaDto : sintomaDtos) {
             System.out.println(sintomaDto);
         }
 
