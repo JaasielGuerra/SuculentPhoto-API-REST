@@ -79,6 +79,10 @@ public class RegistroSuculentasServiceImpl implements RegistroSuculentasService 
             exceptionAcumulador.addException(new SuculentException("El campo consejo no puede estar vacío"));
         }
 
+        if(!etiqueta.getIdSintoma().equals(SINTOMA_SALUDABLE) && etiqueta.getConsejo().length() > 150){
+            exceptionAcumulador.addException(new SuculentException("El consejo no puede tener más de 150 letras"));
+        }
+
         if (etiqueta.getIdSintoma() != null && !sintomaRepository.existsById(etiqueta.getIdSintoma())) {
             exceptionAcumulador.addException(new SuculentException("El idSintoma " + etiqueta.getIdSintoma() + " no existe, por favor registre el sintoma primero"));
         }
@@ -153,6 +157,14 @@ public class RegistroSuculentasServiceImpl implements RegistroSuculentasService 
 
         if (sintomaDto.getDescripcion() == null || sintomaDto.getDescripcion().isEmpty()) {
             exceptionAcumulador.addException(new SuculentException("El campo descripción no puede estar vacío"));
+        }
+
+        if(sintomaDto.getSintoma().length() >50){
+            exceptionAcumulador.addException(new SuculentException("El sintoma no puede tener más de 50 letras"));
+        }
+
+        if(sintomaDto.getDescripcion().length() > 150){
+            exceptionAcumulador.addException(new SuculentException("La descripción no puede tener más de 150 letras"));
         }
 
         // si hay excepciones, las lanzo
