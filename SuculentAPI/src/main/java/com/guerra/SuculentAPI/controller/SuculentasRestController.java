@@ -8,8 +8,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @RestController
@@ -17,9 +19,58 @@ import java.util.stream.Collectors;
 public class SuculentasRestController {
 
     private final RegistroSuculentasService registroSuculentasService;
+    private List<String> mensajesAgradecimientoList = new ArrayList<>();
 
     public SuculentasRestController(RegistroSuculentasService registroSuculentasService) {
         this.registroSuculentasService = registroSuculentasService;
+
+        mensajesAgradecimientoList.add("Agradezco tu valiosa contribución. \uD83D\uDE4F");
+        mensajesAgradecimientoList.add("Valoro mucho tu ayuda en mi investigación. \uD83D\uDC4D");
+        mensajesAgradecimientoList.add("Tu participación es fundamental, gracias. \uD83D\uDC4F");
+        mensajesAgradecimientoList.add("Estoy agradecido por tu colaboración. \uD83D\uDE0A");
+        mensajesAgradecimientoList.add("Gracias por formar parte de mi estudio. \uD83D\uDC4F");
+        mensajesAgradecimientoList.add("Tu aporte es invaluable, gracias. \uD83D\uDE0A");
+        mensajesAgradecimientoList.add("Aprecio sinceramente tu participación. \uD83D\uDC4F");
+        mensajesAgradecimientoList.add("Tu contribución es esencial para mi trabajo. \uD83D\uDE4F");
+        mensajesAgradecimientoList.add("Estoy agradecido por contar contigo. \uD83D\uDC4D");
+        mensajesAgradecimientoList.add("Valoro enormemente tu ayuda, gracias. \uD83D\uDE0A");
+        mensajesAgradecimientoList.add("Agradezco tu valioso aporte a mi tesis. \uD83D\uDC4F");
+        mensajesAgradecimientoList.add("Estoy muy agradecido por tu colaboración. \uD83D\uDE4F");
+        mensajesAgradecimientoList.add("Gracias por contribuir a mi estudio. \uD83D\uDC4D");
+        mensajesAgradecimientoList.add("Tu participación es muy apreciada, gracias. \uD83D\uDE0A");
+        mensajesAgradecimientoList.add("Agradezco tu generosidad al compartir tus fotos. \uD83D\uDC4F");
+        mensajesAgradecimientoList.add("Gracias por ser parte de mi proyecto de tesis. \uD83D\uDE4F");
+        mensajesAgradecimientoList.add("Estoy agradecido por tu compromiso. \uD83D\uDC4D");
+        mensajesAgradecimientoList.add("Tu ayuda es fundamental, gracias por colaborar. \uD83D\uDE0A");
+        mensajesAgradecimientoList.add("Valoro tu tiempo y esfuerzo, gracias por participar. \uD83D\uDC4F");
+        mensajesAgradecimientoList.add("Aprecio sinceramente tu disposición a colaborar. \uD83D\uDE4F");
+        mensajesAgradecimientoList.add("Gracias por tu valiosa contribución. \uD83D\uDC4D");
+        mensajesAgradecimientoList.add("Tu participación es muy valiosa, gracias. \uD83D\uDE0A");
+        mensajesAgradecimientoList.add("Agradezco tu apoyo en mi investigación. \uD83D\uDC4F");
+        mensajesAgradecimientoList.add("Estoy agradecido por tu compromiso. \uD83D\uDE4F");
+        mensajesAgradecimientoList.add("Gracias por compartir tus fotos conmigo. \uD83D\uDC4D");
+        mensajesAgradecimientoList.add("Tu aporte es muy significativo, gracias por colaborar. \uD83D\uDE0A");
+        mensajesAgradecimientoList.add("Aprecio enormemente tu participación. \uD83D\uDC4F");
+        mensajesAgradecimientoList.add("Estoy agradecido por formar parte de mi tesis. \uD83D\uDE4F");
+        mensajesAgradecimientoList.add("Valoro sinceramente tu colaboración. \uD83D\uDC4D");
+        mensajesAgradecimientoList.add("Estoy muy agradecido por contar contigo. \uD83D\uDE0A");
+        mensajesAgradecimientoList.add("Gracias por contribuir con tu tiempo y fotos. \uD83D\uDC4F");
+        mensajesAgradecimientoList.add("Tu participación es esencial, gracias. \uD83D\uDE4F");
+        mensajesAgradecimientoList.add("Agradezco tu generosidad en compartir tus fotos. \uD83D\uDC4D");
+        mensajesAgradecimientoList.add("Gracias por ser parte de mi investigación. \uD83D\uDE0A");
+        mensajesAgradecimientoList.add("Estoy agradecido por tu valiosa contribución. \uD83D\uDC4F");
+        mensajesAgradecimientoList.add("Tu participación es muy apreciada, gracias. \uD83D\uDE4F");
+        mensajesAgradecimientoList.add("Aprecio sinceramente tu disposición a colaborar. \uD83D\uDC4D");
+        mensajesAgradecimientoList.add("Gracias por tu valioso aporte. \uD83D\uDE0A");
+        mensajesAgradecimientoList.add("Tu participación es esencial, gracias. \uD83D\uDC4F");
+        mensajesAgradecimientoList.add("Valoro tu tiempo y esfuerzo, gracias por ayudar. \uD83D\uDE4F");
+        mensajesAgradecimientoList.add("Agradezco sinceramente tu apoyo. \uD83D\uDC4D");
+        mensajesAgradecimientoList.add("Estoy agradecido por tu compromiso. \uD83D\uDE0A");
+        mensajesAgradecimientoList.add("Gracias por compartir tus fotos conmigo. \uD83D\uDC4F");
+        mensajesAgradecimientoList.add("Tu aporte es de gran importancia, gracias por colaborar. \uD83D\uDE4F");
+        mensajesAgradecimientoList.add("Aprecio enormemente tu participación. \uD83D\uDC4D");
+        mensajesAgradecimientoList.add("Estoy agradecido por contar contigo. \uD83D\uDE0A");
+
     }
 
     @GetMapping("/sintomas")
@@ -116,7 +167,7 @@ public class SuculentasRestController {
             SuculentaRegistradaDto suculentaRegistradaDto = registroSuculentasService.registrarSuculenta(fotos, etiqueta);
 
             respuestaRegistroSuculenta = ResponseDataDto.builder()
-                    .message("Suculenta registrada exitosamente")
+                    .message(mensajesAgradecimientoList.get(obtenerNumeroAleatorio()))
                     .data(suculentaRegistradaDto)
                     .errors(Collections.emptyList())
                     .build();
@@ -151,5 +202,11 @@ public class SuculentasRestController {
         }
 
         return ResponseEntity.ok(respuestaRegistroSuculenta);
+    }
+
+    private int obtenerNumeroAleatorio(){
+        int rango = 46; // Rango máximo del número aleatorio (0 - 45)
+        Random random = new Random();
+        return random.nextInt(rango);
     }
 }
