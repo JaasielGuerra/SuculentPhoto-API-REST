@@ -40,6 +40,8 @@ public class RegistroSuculentasServiceImpl implements RegistroSuculentasService 
     private final SintomaRepository sintomaRepository;
     private final ConsejoRepository consejoRepository;
 
+    private final String SINTOMA_SALUDABLE = "SALUDABLE";
+
     public RegistroSuculentasServiceImpl(SintomaRepository sintomaRepository, ConsejoRepository consejoRepository) {
         this.sintomaRepository = sintomaRepository;
         this.consejoRepository = consejoRepository;
@@ -73,7 +75,7 @@ public class RegistroSuculentasServiceImpl implements RegistroSuculentasService 
             exceptionAcumulador.addException(new SuculentException("El campo idSintoma no puede estar vacío"));
         }
 
-        if (etiqueta.getConsejo() == null || etiqueta.getConsejo().isEmpty()) {
+        if ((etiqueta.getConsejo() == null || etiqueta.getConsejo().isEmpty()) && !etiqueta.getIdSintoma().equals(SINTOMA_SALUDABLE)) {
             exceptionAcumulador.addException(new SuculentException("El campo consejo no puede estar vacío"));
         }
 
@@ -99,7 +101,14 @@ public class RegistroSuculentasServiceImpl implements RegistroSuculentasService 
 
     private void persistirDatos(EtiquetaImagenDto etiqueta, int cantFotos) {
 
-        sintomaRepository.aumentarCantidadConsejosYFotos(etiqueta.getIdSintoma(), 1, cantFotos);
+        int cantidadConsejos = etiqueta.getIdSintoma().equals(SINTOMA_SALUDABLE) ? 0 : 1;
+
+        sintomaRepository.aumentarCantidadConsejosYFotos(etiqueta.getIdSintoma(), cantidadConsejos, cantFotos);
+
+        // si es sintoma saludable, no se registran consejos
+        if (etiqueta.getIdSintoma().equals(SINTOMA_SALUDABLE)) {
+            return;
+        }
 
         Consejo consejo = new Consejo();
         consejo.setDescripcion(etiqueta.getConsejo());
