@@ -17,7 +17,7 @@ public interface SintomaRepository extends JpaRepository<Sintoma, String> {
     @Query(value = "SELECT s.cantidadFotos FROM Sintoma s WHERE s.idSintoma = ?1")
     int findCantidadFotosByIdSintoma(String idSintoma);
 
-    @Query(value = "SELECT s.idSintoma AS idSintoma, s.sintoma AS sintoma, s.descripcion AS descripcion FROM Sintoma s")
+    @Query(value = "SELECT s.idSintoma AS idSintoma, s.sintoma AS sintoma, s.descripcion AS descripcion FROM Sintoma s WHERE not s.idSintoma = 'SALUDABLE'")
     List<ConsultaBasicaSintoma> consultarSintomas();
 
 }
