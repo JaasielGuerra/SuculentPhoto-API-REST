@@ -115,7 +115,7 @@ public class RegistroSuculentasServiceImpl implements RegistroSuculentasService 
         }
 
         Consejo consejo = new Consejo();
-        consejo.setDescripcion(etiqueta.getConsejo());
+        consejo.setDescripcion(etiqueta.getConsejo().trim());
         consejo.setIdSintoma(sintomaRepository.getReferenceById(etiqueta.getIdSintoma()));
         consejoRepository.save(consejo);
     }
@@ -180,8 +180,8 @@ public class RegistroSuculentasServiceImpl implements RegistroSuculentasService 
 
         Sintoma sintoma = new Sintoma();
         sintoma.setIdSintoma(idSintomaConstruido);
-        sintoma.setSintoma(sintomaDto.getSintoma());
-        sintoma.setDescripcion(sintomaDto.getDescripcion());
+        sintoma.setSintoma(sintomaDto.getSintoma().trim());
+        sintoma.setDescripcion(sintomaDto.getDescripcion().trim());
         sintoma.setCantidadConsejos(0);
         sintoma.setCantidadFotos(0);
 
