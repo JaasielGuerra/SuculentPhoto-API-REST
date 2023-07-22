@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+@CrossOrigin
 @RestController
 @Log4j2
 public class SuculentasRestController {
