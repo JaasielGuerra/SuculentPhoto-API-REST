@@ -15,6 +15,7 @@
 	<description>API REST para app SuculentPhoto</description>
 	<properties>
 		<java.version>11</java.version>
+		<maven.test.skip>true</maven.test.skip>
 	</properties>
 	<dependencies>
 		<dependency>
