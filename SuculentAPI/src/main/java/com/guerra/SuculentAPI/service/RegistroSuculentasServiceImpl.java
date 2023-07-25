@@ -66,7 +66,9 @@ public class RegistroSuculentasServiceImpl implements RegistroSuculentasService 
 
         //validar que sean imagenes
         for (MultipartFile foto : fotos) {
+            log.info("Validando foto " + foto.getOriginalFilename() + " con tipo " + foto.getContentType());
             if (foto.getContentType() != null && !foto.getContentType().startsWith("image/")) {
+                log.info("La foto " + foto.getOriginalFilename() + " no es una imagen");
                 exceptionAcumulador.addException(new SuculentException("El archivo " + foto.getOriginalFilename() + " no es una imagen"));
             }
         }
