@@ -59,10 +59,12 @@ public class RegistroSuculentasServiceImpl implements RegistroSuculentasService 
             exceptionAcumulador.addException(new SuculentException("No se han enviado fotos"));
         }
 
+        /*   
         int MAX_FOTOS = 6;
         if (!fotos.get(0).isEmpty() && fotos.size() != MAX_FOTOS) {
             exceptionAcumulador.addException(new SuculentException("Deben enviarse " + MAX_FOTOS + " fotos, se enviaron " + fotos.size()));
         }
+        */
 
         //validar que sean imagenes
         for (MultipartFile foto : fotos) {
@@ -77,11 +79,13 @@ public class RegistroSuculentasServiceImpl implements RegistroSuculentasService 
             exceptionAcumulador.addException(new SuculentException("El campo idSintoma no puede estar vacío"));
         }
 
+        /*
         if ((etiqueta.getConsejo() == null || etiqueta.getConsejo().isEmpty()) && !etiqueta.getIdSintoma().equals(SINTOMA_SALUDABLE)) {
             exceptionAcumulador.addException(new SuculentException("El campo consejo no puede estar vacío"));
         }
+        */
 
-        if(!etiqueta.getIdSintoma().equals(SINTOMA_SALUDABLE) && etiqueta.getConsejo().length() > 150){
+        if(!etiqueta.getIdSintoma().equals(SINTOMA_SALUDABLE) && etiqueta.getConsejo() != null && etiqueta.getConsejo().length() > 150){
             exceptionAcumulador.addException(new SuculentException("El consejo no puede tener más de 150 letras"));
         }
 
@@ -107,12 +111,25 @@ public class RegistroSuculentasServiceImpl implements RegistroSuculentasService 
 
     private void persistirDatos(EtiquetaImagenDto etiqueta, int cantFotos) {
 
-        int cantidadConsejos = etiqueta.getIdSintoma().equals(SINTOMA_SALUDABLE) ? 0 : 1;
+        int cantidadConsejos = 1;
+
+        if(etiqueta.getIdSintoma().equals(SINTOMA_SALUDABLE)){
+            cantidadConsejos = 0;
+        }
+
+        if(etiqueta.getConsejo() == null || etiqueta.getConsejo().isEmpty()){
+            cantidadConsejos = 0;
+        }
 
         sintomaRepository.aumentarCantidadConsejosYFotos(etiqueta.getIdSintoma(), cantidadConsejos, cantFotos);
 
         // si es sintoma saludable, no se registran consejos
         if (etiqueta.getIdSintoma().equals(SINTOMA_SALUDABLE)) {
+            return;
+        }
+
+        //si el consejo viene null o vacio, no se registra nada
+        if(etiqueta.getConsejo() == null || etiqueta.getConsejo().isEmpty()){
             return;
         }
 
