@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CONSULTA DE DATASET</title>
+</head>
+<body>
+
+    <h2>Síntomas y Cantidad de Fotos</h2>
+    <table border="0">
+        <thead>
+        <tr>
+            <th>Síntoma</th>
+            <th>Cantidad de Fotos</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item : ${sintomas}">
+            <td th:text="${item.sintoma} +':'"></td>
+            <td style="text-align: end" th:text="${item.cantidadFotos}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+</body>
+</html>
