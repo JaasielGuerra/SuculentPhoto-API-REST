@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/dashboard")
@@ -22,7 +23,45 @@ public class DashboardController {
     @GetMapping
     public String dashboard(Model model) {
 
-        List<ConsultaSintomasFotos> consultaSintomasFotos = sintomaRepository.consultarSintomasFotos();
+        List<ConsultaSintomasFotos> consultaSintomasFotos = sintomaRepository.consultarSintomasFotos()
+                .stream()
+                .collect(Collectors.groupingBy(
+                        item -> item.getSintoma().equals("Cochinilla") || item.getSintoma().equals("Insectos") ? "Cochinilla / Insectos"
+                                : item.getSintoma().equals("Hongo") || item.getSintoma().equals("Moho") ? "Hongo / Moho" : item.getSintoma(),
+                        Collectors.summingInt(ConsultaSintomasFotos::getCantidadFotos)
+                ))
+                .entrySet()
+                .stream()
+                .map(item -> new ConsultaSintomasFotos() {
+                    @Override
+                    public String getSintoma() {
+                        return item.getKey();
+                    }
+
+                    @Override
+                    public int getCantidadFotos() {
+                        return item.getValue();
+                    }
+                })
+                .collect(Collectors.toList());
+
+        int sumaTotalFotos = consultaSintomasFotos.stream()
+                .mapToInt(ConsultaSintomasFotos::getCantidadFotos)
+                .sum();
+
+        consultaSintomasFotos.add(new ConsultaSintomasFotos() {
+            @Override
+            public String getSintoma() {
+                return "TOTAL FOTOS";
+            }
+
+            @Override
+            public int getCantidadFotos() {
+                return sumaTotalFotos;
+            }
+        });
+
+
         model.addAttribute("sintomas", consultaSintomasFotos);
 
         return "index";
